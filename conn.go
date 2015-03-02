@@ -22,7 +22,7 @@ import (
 	"time"
 	"unicode"
 
-	"github.com/lib/pq/oid"
+	"github.com/pkieltyka/pq/oid"
 )
 
 // Common error types
@@ -1323,10 +1323,12 @@ func (rs *rows) Next(dest []driver.Value) (err error) {
 			for i := range dest {
 				l := rs.rb.int32()
 				if l == -1 {
-					dest[i] = nil
+					// dest[i] = nil
+					dest[i] = []byte{}
 					continue
 				}
-				dest[i] = decode(&conn.parameterStatus, rs.rb.next(l), rs.st.rowTyps[i])
+				dest[i] = rs.rb.next(l)
+				// dest[i] = decode(&conn.parameterStatus, rs.rb.next(l), rs.st.rowTyps[i])
 			}
 			return
 		default:
